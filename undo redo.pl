@@ -1,7 +1,7 @@
 use common::sense;
 use Xchat;
 
-Xchat::register 'Undo/Redo', '1.00', 'Undo (Ctrl-Z) and redo (Ctrl-Y/Ctrl-Shift-Z) for the inputbox.';
+Xchat::register 'Undo/Redo', '1.01', 'Undo (Ctrl-Z) and redo (Ctrl-Y/Ctrl-Shift-Z) for the inputbox.';
 Xchat::hook_print 'Key Press', \&key_press;
 
 my @ignore = (
@@ -31,8 +31,8 @@ sub key_press {
 
 	#on enter, empty the lists
 	if ($key == 65293) {
-		$undo = [''];
-		$redo = [  ];
+		@$undo = ('');
+		@$redo = (  );
 
 		return Xchat::EAT_NONE;
 	}
@@ -42,13 +42,17 @@ sub key_press {
 		#in order to not have to hit the hotkey twice,
 		#don't set text that is the same as the one in the inputbox
 		#this usually happens on the first undo or redo
-		if ($undo->[-1] eq Xchat::get_info 'inputbox') {
+		if (@$undo > 1 && $undo->[-1] eq Xchat::get_info 'inputbox') {
 			push $redo, pop $undo;
 		}
 
 		if (@$undo) {
-			my $text = pop $undo;
-			push $redo, $text;
+			my $text = $undo->[-1];
+
+			#avoid sending last item to $redo
+			if (@$undo > 1) {
+				push $redo, pop $undo;
+			}
 
 			set_text($text);
 		}
@@ -76,7 +80,7 @@ sub key_press {
 	#because the currently added key has not been added to it yet
 	Xchat::hook_timer 0, sub {
 		my $text = Xchat::get_info 'inputbox';
-		if (!@$undo || $undo->[-1] ne $text) {
+		if (!@$undo && length $text || $undo->[-1] ne $text) {
 			push $undo, $text;
 			$redo = [ ];
 		}
@@ -90,7 +94,7 @@ sub key_press {
 sub set_text {
 	my ($text) = @_;
 
-	my $length = length $text + 0; #force numeric
+	my $length = 0 + length $text; #force numeric in case $text is empty
 
 	Xchat::command "settext $text";
 	Xchat::command "setcursor $length";
