@@ -1,5 +1,4 @@
 ### Perl scripts for HexChat and/or Xchat
--------------------------------------
 
 #### ctrl-enter.pl
 Sends the text in the inputbox to the server without any processing. Mostly useful for sending lines starting with a slash, instead of prefixing it with another slash or using /say.
