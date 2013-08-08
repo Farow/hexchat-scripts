@@ -1,5 +1,8 @@
 ### Perl scripts for HexChat and/or Xchat
 
+#### autocomplete-no-spaces.pl
+Removes the space that is inserted after completing a nick, the moment you hit a different key. No more backspace!
+
 #### ctrl-enter.pl
 Sends the text in the inputbox to the server without any processing. Mostly useful for sending lines starting with a slash, instead of prefixing it with another slash or using /say.
 
