@@ -12,16 +12,16 @@ Complete files or directories with Shift-Tab, or just Tab for /load, /unload or 
 You can set custom paths to look for and a limit for cycling between completitions.
 
 #### hide-whois-end.pl
-Doesn't let HexChat display the end of whois messages. They're useless anyway.
+Doesn't let HexChat display whois end messages. They're useless anyway.
 
 #### linebreak.pl
-Insert a line break but pressing Shift-Enter. The line break will be invisible but upon sending, they will show up as separate messages.
+Insert a line break by pressing Shift-Enter. The line break will be invisible but the message will be split as expected.
 
 #### notice2server.pl
 Force notices from some nicks to be displayed in the server tab.
 
 #### undo-redo.pl
-Adds undo and redo functionality to the inputbox. Hit Ctrl-Z for undo and Ctrl-Y/Ctrl-Shift-Z for redo. Based on [TingPing's script](https://github.com/TingPing/plugins/blob/master/HexChat/undo.py) with a few improvments.
+Adds undo and redo functionality to the inputbox. Hit Ctrl-Z for undo and Ctrl-Y or Ctrl-Shift-Z for redo. Based on [TingPing's script](https://github.com/TingPing/plugins/blob/master/HexChat/undo.py) with a few improvments.
 
 #### whois-on-pm.pl
 When someone sends you a personal message and you don't already have a tab for the conversation, this will send a whois request and display the response in the new tab. Can be useful in case you want to know the channels the user is in.

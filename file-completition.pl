@@ -1,9 +1,8 @@
 use common::sense;
-#use FindBin;
 use Xchat;
 use File::Spec;
-use Data::Dumper;
 
+Xchat::register 'File Completition', '1.01', 'Completes filenames with Shift-Tab, or just Tab for /load, /unload or /reload commands';
 Xchat::hook_print 'Key Press', \&key_press;
 
 #Xchat::print (File::Spec->canonpath('X:/Stuff'));
@@ -69,16 +68,15 @@ sub key_press {
 			my $filename = do {
 				my $path = $matches[ $complete->{ $context }{'index'} ]{'path'};
 				my $name = $matches[ $complete->{ $context }{'index'} ]{'name'};
-				File::Spec->catfile($path, $name);
+
+				#convert to relative if possible
+				File::Spec->abs2rel(File::Spec->catfile($path, "$name"));
 			};
 
+			#add quotes if needed
 			$filename = "\"$filename\"" if $filename =~ / /;
 
-			#change to relative if possible
-			$filename = File::Spec->abs2rel($filename);
-
 			set_text("$before$filename");
-
 			$complete->{ $context }{'index'}++;
 		}
 
@@ -132,7 +130,10 @@ sub set_text {
 	my ($text) = @_;
 
 	my $result = Xchat::command "settext $text";
-	Xchat::command 'setcursor ' . (0 + length $text) if $result;
+	if ($result) {
+		my $offset = $text =~ / / ? -1 : 0;
+		Xchat::command 'setcursor ' . ($offset + length $text);
+	}
 
 	return $result;
 }
