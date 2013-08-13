@@ -5,8 +5,6 @@ use File::Spec;
 Xchat::register 'File Completition', '1.01', 'Completes filenames with Shift-Tab, or just Tab for /load, /unload or /reload commands';
 Xchat::hook_print 'Key Press', \&key_press;
 
-#Xchat::print (File::Spec->canonpath('X:/Stuff'));
-
 #default paths to look into
 my @default  = (
 	File::Spec->catfile('config', 'addons'),

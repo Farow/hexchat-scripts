@@ -4,6 +4,9 @@ These scripts use [common::sense](https://metacpan.org/module/common::sense). If
 #### autocomplete-no-spaces.pl
 Removes the space that is inserted after completing a nick, after a change is detected (usually any character key and enter). You can also add regex rules for when not to remove the space. No more backspace!
 
+#### coloured-highlights.pl
+Colours the nicks (and optionally the message) when you are highlighted, since HexChat doesn't do it because it considers highlights "special". The colour applied is the one that HexChat would use for the nick on normal messages.
+
 #### ctrl-enter.pl
 Sends the text in the inputbox to the server without any processing. Mostly useful for sending lines starting with a slash, instead of prefixing it with another slash or using /say.
 

@@ -7,7 +7,7 @@ Xchat::hook_print 'Key Press', \&key_press;
 my $watch = { };
 my @keep  = (
 	qr/^[\p{L}\d]$/o, #any letter or number
-	qr/^.{2,}/o,      #for bigger changes
+	qr/.{2}/o,        #for bigger changes
 );
 
 sub key_press {
