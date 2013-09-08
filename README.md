@@ -1,8 +1,11 @@
 #### Perl scripts for HexChat and/or Xchat
-These scripts use [common::sense](https://metacpan.org/module/common::sense). If you don't have it and want to install it, follow the instructions on the [documentation](https://hexchat.readthedocs.org/en/latest/perl_modules.html) if you're using HexChat's Perl, or use CPAN. Otherwise, you can simply change `use common::sense;` to `use v5.16;` or whatever your perl version is without any real difference. Note that some scripts rely on code from the newer versions.
+These scripts use [common::sense](https://metacpan.org/module/common::sense). If you don't have it and want to install it, follow the instructions on the [documentation](https://hexchat.readthedocs.org/en/latest/perl_modules.html) if you're using HexChat's Perl, or use CPAN. Otherwise, you can simply change `use common::sense;` to `use v5.16;` or whatever your perl version is without any real difference. Note that some scripts rely on the newer versions.
 
 #### autocomplete-no-spaces.pl
 Removes the space that is inserted after completing a nick, after a change is detected (usually any character key and enter). You can also add regex rules for when not to remove the space. No more backspace!
+
+#### channel-mode-prefix.pl
+Adds your mode symbol at the beginning of the channel name.
 
 #### coloured-highlights.pl
 Colours the nicks (and optionally the message) when you are highlighted, since HexChat doesn't do it because it considers highlights "special". The colour applied is the one that HexChat would use for the nick on normal messages.
