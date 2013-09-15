@@ -17,6 +17,9 @@ Sends the text in the inputbox to the server without any processing. Mostly usef
 Complete files or directories with Shift-Tab, or just Tab for /load, /unload or /reload. This script will try to return relative paths when possible.
 You can set custom paths to look for and a limit for cycling between completitions.
 
+#### force-specified-colours.pl
+Removes all formating from the text events you specify so that your own colours can be used for the whole event. No more nasty quit messages with 12345 colours.
+
 #### hide-whois-end.pl
 Doesn't let HexChat display whois end messages. They're useless anyway.
 
