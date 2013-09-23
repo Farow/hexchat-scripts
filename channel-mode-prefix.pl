@@ -1,7 +1,7 @@
 use common::sense;
 use Xchat;
 
-Xchat::register 'Channel mode prefix', '1.02', 'Adds your mode symbol at the beginning of the channel name.';
+Xchat::register 'Channel mode prefix', '1.03', 'Adds your mode symbol at the beginning of the channel name.';
 
 Xchat::hook_print 'Channel Mode Generic', \&generic_mode_change;
 Xchat::hook_print $_, \&mode_change, { 'data' => $_ }
@@ -43,7 +43,7 @@ sub channel_join {
 	my $users   = substr $_[1][5], 1;
 	my $nick    = Xchat::get_info 'nick';
 
-	delay(\&set_prefix, $channel) if $users =~ /^.\Q$nick\E$/;
+	delay(\&set_prefix, $channel) if $users =~ /^.\Q$nick\E/;
 
 	return Xchat::EAT_NONE;
 }
