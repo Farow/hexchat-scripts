@@ -1,14 +1,17 @@
 use common::sense;
 use Xchat;
-use Data::Dumper;
 
-Xchat::register 'Channel mode prefix', '1.00', 'Adds your mode symbol at the beginning of the channel name.';
+Xchat::register 'Channel mode prefix', '1.01', 'Adds your mode symbol at the beginning of the channel name.';
 
 Xchat::hook_print 'Channel Mode Generic', \&generic_mode_change;
 Xchat::hook_print $_, \&mode_change, { 'data' => $_ }
 	for 'Channel Voice',         'Channel DeVoice',
 		'Channel Half-Operator', 'Channel DeHalfOp',
 		'Channel Operator',      'Channel DeOp';
+
+Xchat::hook_server '353', \&channel_join;
+
+#set_prefix();
 
 sub generic_mode_change {
 	my ($data) = @_;
@@ -34,6 +37,15 @@ sub mode_change {
 	return Xchat::EAT_NONE if fc $nick ne fc $data->[1];
 
 	Xchat::hook_timer 0, \&set_prefix;
+
+	return Xchat::EAT_NONE;
+}
+
+sub channel_join {
+	my $users = substr $_[1][5], 1;
+	my $nick  = Xchat::get_info 'nick';
+
+	Xchat::hook_timer 0, \&set_prefix if $users =~ /.\Q$nick\E/;
 
 	return Xchat::EAT_NONE;
 }
