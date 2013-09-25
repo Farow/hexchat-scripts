@@ -1,8 +1,8 @@
 use common::sense;
 use Xchat;
 
-Xchat::register 'Whois on PM', '1.00', 'Sends a Whois request when someone PM\'s you and display the response in the new tab.';
-Xchat::hook_print 'Open Context', \&new_context;
+Xchat::register 'Whois on PM', '1.01', 'Sends a Whois request when someone sends you a PM and display the response in the new tab.';
+Xchat::hook_print 'Open Dialog', \&new_context;
 
 my $contexts = { };
 
@@ -32,7 +32,7 @@ sub new_context {
 				#ignore whois for different nicks
 				return Xchat::EAT_NONE if fc $params->[0] ne fc $info->{'channel'};
 
-				#print the whois in the c
+				#print the whois in the dialog
 				Xchat::set_context $info->{'context'};
 				Xchat::emit_print $event, @$params;
 
@@ -41,7 +41,7 @@ sub new_context {
 
 				return Xchat::EAT_XCHAT;
 			},
-			{ 'data' => $_ }
+			{ 'data' => $_ };
 		} @whois_events ];
 
 		Xchat::command "whois $info->{'channel'}";

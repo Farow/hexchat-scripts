@@ -13,9 +13,15 @@ Colours the nicks (and optionally the message) when you are highlighted, since H
 #### ctrl-enter.pl
 Sends the text in the inputbox to the server without any processing. Mostly useful for sending lines starting with a slash, instead of prefixing it with another slash or using /say.
 
+#### eval.pl
+Evaluate Perl code and display results with Data::Dumper.
+
 #### file-completition.pl
 Complete files or directories with Shift-Tab, or just Tab for /load, /unload or /reload. This script will try to return relative paths when possible.
 You can set custom paths to look for and a limit for cycling between completitions.
+
+#### find-mask.pl
+Find nicks matching a mask in a channel. Usage: /find <mask>
 
 #### force-specified-colours.pl
 Removes all formating from the text events you specify so that your own colours can be used for the whole event. No more nasty quit messages with 12345 colours.
