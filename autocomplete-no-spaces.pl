@@ -1,7 +1,7 @@
 use common::sense;
 use Xchat;
 
-Xchat::register 'Autocomplete without spaces', '1.01', 'Removes that space.';
+Xchat::register 'Autocomplete without spaces', '1.02', 'Removes that space.';
 Xchat::hook_print 'Key Press', \&key_press;
 
 my $watch = { };
@@ -60,7 +60,7 @@ sub key_press {
 			return Xchat::REMOVE if $text eq $new_text;
 
 			#make sure all the new text is there and one more character
-			if ($new_text =~ /^$text/) {
+			if ($new_text =~ /^\Q$text/) {
 				my $last = substr $new_text, length $text;
 
 				#replace if none of the regexes match
