@@ -73,6 +73,10 @@ Insert a line break by pressing Shift-Enter. The line break will be invisible bu
 #### notice2server.pl
 Force notices from some nicks to be displayed in the server tab.
 
+#### one-instance.pl
+Only allows one instance of HexChat running and brings the existing instance to front. The new window will appear for a very short amount of time.
+Note: HexChat does this by default on Linux so this script is only for Windows.
+
 #### undo-redo.pl
 Adds undo and redo functionality to the inputbox. Hit Ctrl-Z for undo and Ctrl-Y or Ctrl-Shift-Z for redo. Based on [TingPing's script](https://github.com/TingPing/plugins/blob/master/HexChat/undo.py) with a few improvments.
 
