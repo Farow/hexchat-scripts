@@ -1,35 +1,35 @@
 ### Perl scripts for HexChat (and/or Xchat)
-These scripts use [common::sense](https://metacpan.org/module/common::sense). If you don't have it and want to install it, follow the instructions on the [documentation](https://hexchat.readthedocs.org/en/latest/perl_modules.html) if you're using HexChat's Perl, or use CPAN. Otherwise, you can simply change `use common::sense;` to `use v5.18;` or whatever your latest version of Perl is, without any real difference. Note that some scripts rely on the newer versions.
+These scripts use [common::sense](https://metacpan.org/module/common::sense). To install modules follow the instructions on the [documentation](https://hexchat.readthedocs.org/en/latest/perl_modules.html), run cpan.bat and type `install common::sense`. You can also simply change `use common::sense;` to `use v5.18;` or whatever your latest version of Perl is, without any real difference. Note that some scripts rely on the newer versions.
 
-#### autocomplete-no-spaces.pl
+#### [autocomplete-no-spaces.pl](autocomplete-no-spaces.pl)
 Removes the space that is inserted after completing a nick, after a change is detected (usually any character key and enter). You can also add regex rules for when not to remove the space. No more backspace!
 
-#### channel-mode-prefix.pl
+#### [channel-mode-prefix.pl](channel-mode-prefix.pl)
 Adds your mode symbol at the beginning of the channel name.
 
-#### coloured-highlights.pl
+#### [coloured-highlights.pl](coloured-highlights.pl)
 Colours the nicks (and optionally the message) when you are highlighted, since HexChat doesn't do it because it considers highlights "special". The colour applied is the one that HexChat would use for the nick on normal messages.
 
-#### ctrl-enter.pl
+#### [ctrl-enter.pl](ctrl-enter.pl)
 Sends the text in the inputbox to the server without any processing. Mostly useful for sending lines starting with a slash, instead of prefixing it with another slash or using /say.
 
-#### eval.pl
+#### [eval.pl](eval.pl)
 Evaluate Perl code and display results with Data::Dumper.
 
-#### file-completition.pl
+#### [file-completition.pl](file-completition.pl)
 Complete files or directories with Shift-Tab, or just Tab for /load, /unload or /reload. This script will try to return relative paths when possible.
 You can set custom paths to look for and a limit for cycling between completitions.
 
-#### find-mask.pl
+#### [find-mask.pl](find-mask.pl)
 Find nicks matching a mask in a channel. Usage: /find <mask>
 
-#### force-specified-colours.pl
+#### [force-specified-colours.pl](force-specified-colours.pl)
 Removes all formating from the text events you specify so that your own colours can be used for the whole event. No more nasty quit messages with 12345 colours.
 
-#### hide-whois-end.pl
+#### [hide-whois-end.pl](hide-whois-end.pl)
 Doesn't let HexChat display whois end messages. They're useless anyway.
 
-#### identifier.pl
+#### [identifier.pl](identifier.pl)
 A script that automatically ghosts other instances, changes nick and identifies before letting HexChat join channels or execute connect commands.
 Usage:
 - Put your NickServ password in the password field from a specific network.
@@ -65,22 +65,27 @@ $networks = {
 };
 ```
 The way this script works is by not letting HexChat see the 376 (motd end) message until you have been identified or 15s after it is received, provided that no notices have been sent or recognized from NickServ (in case the services are down or the nick is not registered). Not letting HexChat see a motd end message can have side-effects such as lag not being calculated.
-Finally, by setting your NickServ password in the password field, you will most likely be unable to connect to servers that require a password (/pass). Message me if you want this fixed as I don't know any servers that require a password.
+Finally, by setting your NickServ password in the password field, you will most likely be unable to connect to servers (or use SASL) that require a password (/pass). Message me if you want this fixed as I don't know any servers that require a password.
 
-#### linebreak.pl
+#### [linebreak.pl](linebreak.pl)
 Insert a line break by pressing Shift-Enter. The line break will be invisible but the message will be split as expected.
 
-#### notice2server.pl
+#### [notice2server.pl](notice2server.pl)
 Force notices from some nicks to be displayed in the server tab.
 
-#### one-instance.pl
+#### [one-instance.pl](one-instance.pl)
 Only allows one instance of HexChat running and brings the existing instance to front. The new window will appear for a very short amount of time.
 Note: HexChat does this by default on Linux so this script is only for Windows.
 
-#### undo-redo.pl
+#### [session.pl](session.pl)
+Restores networks, channels, queries and nicks. Supports networks not in the network list as well as multiple connections to the same networks. To use it, load the script, disable any networks autoconnecting and reconnect to any networks not on the network list so that the script can see their hosts, ports and if they're using ssl.
+While starting up, any changes made won't be saved for about a minute, to give HexChat some time to connect and join channels. Saving will happen in a different thread in order to return to HexChat as soon as possible and avoid any freezing while the file is being written.
+Inspired by [TingPing's session.py](https://github.com/TingPing/plugins/blob/master/HexChat/session.py).
+
+#### [undo-redo.pl](undo-redo.pl)
 Adds undo and redo functionality to the inputbox. Hit Ctrl-Z for undo and Ctrl-Y or Ctrl-Shift-Z for redo. Based on [TingPing's script](https://github.com/TingPing/plugins/blob/master/HexChat/undo.py) with a few improvments.
 
-#### whois-on-pm.pl
+#### [whois-on-pm.pl](whois-on-pm.pl)
 When someone sends you a personal message and you don't already have a tab for the conversation, this will send a whois request and display the response in the new tab. Can be useful in case you want to know the channels the user is in.
 
 ### Useful scripts made by others
