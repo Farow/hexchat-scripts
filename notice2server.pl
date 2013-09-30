@@ -1,5 +1,4 @@
 use common::sense;
-
 use Xchat;
 
 my @nicks = qw|

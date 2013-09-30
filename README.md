@@ -1,43 +1,40 @@
-### Perl scripts for HexChat (and/or Xchat)
-These scripts use [common::sense](https://metacpan.org/module/common::sense). To install modules follow the instructions on the [documentation](https://hexchat.readthedocs.org/en/latest/perl_modules.html), run cpan.bat and type `install common::sense`. You can also simply change `use common::sense;` to `use v5.18;` or whatever your latest version of Perl is, without any real difference. Note that some scripts rely on the newer versions.
+### Perl scripts for HexChat (and Xchat)
+All of these scripts use the [common::sense](https://metacpan.org/module/common::sense) module which is most likely not included in your Perl. However, it is not required and you can simply change `use common::sense;` to `use v5.18;` or whichever your version of Perl is (a few scripts require at least v5.16).  
+HexChat's documentation describes how you can [install modules on Windows](https://hexchat.readthedocs.org/en/latest/perl_modules.html).
 
-#### [autocomplete-no-spaces.pl](autocomplete-no-spaces.pl)
-Removes the space that is inserted after completing a nick, after a change is detected (usually any character key and enter). You can also add regex rules for when not to remove the space. No more backspace!
+Some of these scripts might provide a few settings but you'll have to modify the files. Those should be below the `use` statements and before `Xchat::register`.
 
-#### [channel-mode-prefix.pl](channel-mode-prefix.pl)
-Adds your mode symbol at the beginning of the channel name.
+**[autocomplete-no-spaces.pl](autocomplete-no-spaces.pl)** - Removes the space that is inserted after completing a nick, after a change is detected. You can also add regex rules for when not to remove the space.  
+**[channel-mode-prefix.pl](channel-mode-prefix.pl)** - Adds your mode symbol at the beginning of the tab name.  
+**[coloured-highlights.pl](coloured-highlights.pl)** - Colours the nicks (and optionally the message) when you are highlighted, since HexChat doesn't do it.  
+**[ctrl-enter.pl](ctrl-enter.pl)** - Sends the text in the inputbox to the server without any processing.  
+**[eval.pl](eval.pl)** - Evaluates Perl code via `/eval` and displays the results with `Data::Dumper`.  
+**[file-completition.pl](file-completition.pl)** - Completes filenames with Shift-Tab (or just Tab for specified commands).  
+**[find-mask.pl](find-mask.pl)** - Finds nicks matching a mask in a channel. Usage: /find <mask>  
+**[force-specified-colours.pl](force-specified-colours.pl)** - Removes all formating from the text events you specify so that your current formatting can be used for the whole event.  
+**[hide-whois-end.pl](hide-whois-end.pl)** - Hides whois end messages.  
+**[identifier.pl](identifier.pl)** ([see remarks](#identifier)) - Automatically ghosts, changes nick and identifies with NickServ.  
+**[linebreak.pl](linebreak.pl)** - Inserts an invisible line break by pressing Shift-Enter.  
+**[notice2server.pl](notice2server.pl)** - Forces notices from some nicks to be displayed in the server tab.  
+**[one-instance.pl](one-instance.pl)** Only allows one instance of HexChat running and brings the existing instance to front. Requires `Win32::Event` and is only for Windows as HexChat does this on Linux.  
+[ *u* ] **[session.pl](session.pl)** ([see remarks](#session)) - Restores your last used networks, channels and nicks.  
+**[undo-redo.pl](undo-redo.pl)** - Adds undo and redo functionality to the inputbox.  
+[ *u* ] **[whois-on-pm.pl](whois-on-pm.pl)** - Sends a whois when you get a new private dialog is created.
 
-#### [coloured-highlights.pl](coloured-highlights.pl)
-Colours the nicks (and optionally the message) when you are highlighted, since HexChat doesn't do it because it considers highlights "special". The colour applied is the one that HexChat would use for the nick on normal messages.
+Legend: [ *u* ] - recently updated, [ *n* ] - new
 
-#### [ctrl-enter.pl](ctrl-enter.pl)
-Sends the text in the inputbox to the server without any processing. Mostly useful for sending lines starting with a slash, instead of prefixing it with another slash or using /say.
 
-#### [eval.pl](eval.pl)
-Evaluate Perl code and display results with Data::Dumper.
+### Remarks
 
-#### [file-completition.pl](file-completition.pl)
-Complete files or directories with Shift-Tab, or just Tab for /load, /unload or /reload. This script will try to return relative paths when possible.
-You can set custom paths to look for and a limit for cycling between completitions.
-
-#### [find-mask.pl](find-mask.pl)
-Find nicks matching a mask in a channel. Usage: /find <mask>
-
-#### [force-specified-colours.pl](force-specified-colours.pl)
-Removes all formating from the text events you specify so that your own colours can be used for the whole event. No more nasty quit messages with 12345 colours.
-
-#### [hide-whois-end.pl](hide-whois-end.pl)
-Doesn't let HexChat display whois end messages. They're useless anyway.
-
-#### [identifier.pl](identifier.pl)
-A script that automatically ghosts other instances, changes nick and identifies before letting HexChat join channels or execute connect commands.
+<a name="identifier" />
+####[identifier.pl](identifier.pl)
 Usage:
 - Put your NickServ password in the password field from a specific network.
 - Change login method to custom.
 - Put any commands you wish in the connect commands field.
 - Restart HexChat or disconnect from the network and hit the connect button in the network list so that changes take effect.
 
-The default behaviour of HexChat is to send the connect commands in your current tab (or last used one if another network is focused?). It's possible to force commands to be executed in the server tab with a few changes in the script. Expand the $network variable to something like:
+The default behaviour of HexChat is to send the connect commands in your current tab (or last used one if another network is focused?). It's possible to force commands to be executed in the server tab with a few changes in the script. Expand the $networks variable to something like:
 
 ```perl
 $networks = {
@@ -64,31 +61,21 @@ $networks = {
 	},
 };
 ```
-The way this script works is by not letting HexChat see the 376 (motd end) message until you have been identified or 15s after it is received, provided that no notices have been sent or recognized from NickServ (in case the services are down or the nick is not registered). Not letting HexChat see a motd end message can have side-effects such as lag not being calculated.
-Finally, by setting your NickServ password in the password field, you will most likely be unable to connect to servers (or use SASL) that require a password (/pass). Message me if you want this fixed as I don't know any servers that require a password.
+The way this script works is by not letting HexChat see the 376 (motd end) message until you have been identified or 15s after it is received, provided that no notices have been sent or recognized from NickServ (in case the services are down or the nick is not registered). Not letting HexChat see a motd end message can have side-effects such as lag not being calculated.  
+Finally, by setting your NickServ password in the password field, you will most likely be unable to connect to servers (or use SASL) that require a password (/pass). If you want this fixed, let me know as I don't know use any of those.
 
-#### [linebreak.pl](linebreak.pl)
-Insert a line break by pressing Shift-Enter. The line break will be invisible but the message will be split as expected.
-
-#### [notice2server.pl](notice2server.pl)
-Force notices from some nicks to be displayed in the server tab.
-
-#### [one-instance.pl](one-instance.pl)
-Only allows one instance of HexChat running and brings the existing instance to front. The new window will appear for a very short amount of time.
-Note: HexChat does this by default on Linux so this script is only for Windows.
-
+<a name="session" />
 #### [session.pl](session.pl)
-Restores networks, channels, queries and nicks. Supports networks not in the network list as well as multiple connections to the same networks. To use it, load the script, disable any networks autoconnecting and reconnect to any networks not on the network list so that the script can see their hosts, ports and if they're using ssl.
-While starting up, any changes made won't be saved for about a minute, to give HexChat some time to connect and join channels. Saving will happen in a different thread in order to return to HexChat as soon as possible and avoid any freezing while the file is being written.
+Usage:
+- Disable autoconnecting to networks
+- Reconnect to any networks not in the network list (so that connection information can be see and saved properly)
+
+Any changes from the point of loading the script will be saved and restored when you next start HexChat. However, while starting up, any changes won't be saved for about a minute, to give HexChat some time to connect and join channels. You can disable autosaving and use `/save` and `/restore` to save and restore the session manually.  
 Inspired by [TingPing's session.py](https://github.com/TingPing/plugins/blob/master/HexChat/session.py).
 
-#### [undo-redo.pl](undo-redo.pl)
-Adds undo and redo functionality to the inputbox. Hit Ctrl-Z for undo and Ctrl-Y or Ctrl-Shift-Z for redo. Based on [TingPing's script](https://github.com/TingPing/plugins/blob/master/HexChat/undo.py) with a few improvments.
-
-#### [whois-on-pm.pl](whois-on-pm.pl)
-When someone sends you a personal message and you don't already have a tab for the conversation, this will send a whois request and display the response in the new tab. Can be useful in case you want to know the channels the user is in.
-
 ### Useful scripts made by others
+Scripts made by others that I actually use and find (somewhat) useful.
+
 - [Common Denominator](https://github.com/tobiassjosten/xchat-common-denominator)
 - [Mass Highlight Ignore](http://orvp.net/xchat/masshighlightignore/)
 - [Viewlog](http://lwsitu.com/xchat/viewlog.pl)
@@ -101,7 +88,7 @@ When someone sends you a personal message and you don't already have a tab for t
 - [TingPing](https://github.com/TingPing/plugins/tree/master/HexChat)
 
 #### Other
-- [boat](http://b0at.tx0.org/xchat/addons/addons.html)
+- [b0at](http://b0at.tx0.org/xchat/addons/addons.html)
 - [Orvp](http://orvp.net/xchat.php)
 - [Sam Hocevar](http://lwsitu.com/xchat/)
 - [Xchat](http://xchat.org/cgi-bin/disp.pl) (mostly broken links)

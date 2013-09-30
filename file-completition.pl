@@ -3,16 +3,14 @@ use Xchat;
 use File::Spec;
 use Cwd;
 
-Xchat::register 'File Completition', '1.02', 'Completes filenames with Shift-Tab, or just Tab for /load, /unload or /reload commands';
-Xchat::hook_print 'Key Press', \&key_press;
-
+#remove the working directory from the path if possible
 my $remove_working_dir = 1;
 
 my $configdir  = Xchat::get_info 'configdir';
 my $addondir   = File::Spec->catfile($configdir, 'addons');
 my $workingdir = File::Spec->canonpath(getcwd);
 
-#paths to look into
+#paths to look into for files
 my @paths  = (
 	$addondir,
 );
@@ -29,7 +27,12 @@ my @filename_only = (
 	'script update',
 );
 
-my $limit    = 10; #only cycle through up to 10 items
+#how many files to cycle through
+my $limit = 10;
+
+Xchat::register 'File Completition', '1.02', 'Completes filenames with Shift-Tab, or just Tab for /load, /unload or /reload commands';
+Xchat::hook_print 'Key Press', \&key_press;
+
 my $complete = { };
 
 sub key_press {

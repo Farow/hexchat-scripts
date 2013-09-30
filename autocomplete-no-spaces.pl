@@ -1,14 +1,16 @@
 use common::sense;
 use Xchat;
 
+#chose when to keep the space
+my @keep = (
+	qr/^[\p{L}\d]$/o, #any letter or number
+	qr/.{2}/o,        #for bigger changes
+);
+
 Xchat::register 'Autocomplete without spaces', '1.02', 'Removes that space.';
 Xchat::hook_print 'Key Press', \&key_press;
 
 my $watch = { };
-my @keep  = (
-	qr/^[\p{L}\d]$/o, #any letter or number
-	qr/.{2}/o,        #for bigger changes
-);
 
 sub key_press {
 	my ($key, $modifier) = @{ $_[0] };

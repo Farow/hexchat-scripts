@@ -12,8 +12,14 @@ use Storable qw|nstore retrieve freeze thaw|;
 use File::Spec;
 use Data::Dumper;
 
-my $queue = Thread::Queue->new()      if $threads;
-my $thr   = threads->create(\&worker) if $threads;
+#automatically save sessions
+my $autosave        = 1;
+
+#warn if not restoring session automatically
+my $warn            = 1;
+
+#notify when sessions are being automatically saved
+my $notify          = 1;
 
 #restore tabs to users
 my $restore_queries = 1;
@@ -25,26 +31,29 @@ my $delay           = 1000;
 #file to store session
 my $file = File::Spec->catfile(Xchat::get_info('configdir'), 'session.dat');
 
-Xchat::register 'Session', '1.00', 'Restores your last used networks and channels.', \&unload;
+Xchat::register 'Session', '1.01', 'Restores your last used networks and channels.', \&unload;
 
 Xchat::hook_command 'restore', \&restore;
 Xchat::hook_command 'save',    \&save;
 
-#save changes when...
-Xchat::hook_print $_, \&change for
-	#a tab is opened or closed
-	'Open Context', 'Close Context',
-	#a channel key is changed
-	'Channel Remove Keyword', 'Channel Set Key',
-	'Channel Modes',
-	#your nick is changed
-	'Your Nick Changing',
-;
-#a network name is seen (for networks not in the network list)
-Xchat::hook_server '005', \&change;
 
-#join channels after succesfully reconnecting
-my $motd = Xchat::hook_server $_, \&join_channels, for qw|376 422|;
+if ($autosave) {
+	#automatically save changes when...
+	Xchat::hook_print $_, \&change for
+		#a tab is opened or closed
+		'Open Context', 'Close Context',
+		#a channel key is changed
+		'Channel Remove Keyword', 'Channel Set Key',
+		'Channel Modes',
+		#your nick is changed
+		($restore_nicks ? 'Your Nick Changing' : ()),
+	;
+
+	#a network name is seen (for networks not in the network list)
+	Xchat::hook_server '005', \&change;
+}
+
+
 
 Xchat::hook_print 'Connecting',  \&connecting_info;
 Xchat::hook_print 'SSL Message', \&ssl_info;
@@ -61,6 +70,13 @@ my $join = [ ];
 
 #avoid saving session for a while after loading this script
 my $connecting = 1;
+
+#motd hook is stored here uppon successfully restoring
+my $motd;
+
+#initialize threads
+my $queue = Thread::Queue->new()      if $threads;
+my $thr   = threads->create(\&worker) if $threads;
 
 load();
 
@@ -177,9 +193,14 @@ sub load {
 	#check if there are any tabs with channel (existing tab) in case the script is reloaded
 	if (grep { $_->{'channel'} } Xchat::get_list 'channels') {
 		$connecting = 0;
-		Xchat::print "*\tOpen tabs detected. Restoring sessions with active tabs is not tested and is not recommended.";
-		Xchat::print "*\tAny changes made will be saved.";
-		Xchat::print "*\tUse /restore to force restore the session and enable saving.";
+
+		if ($warn) {
+			Xchat::print "*\tOpen tabs detected. Restoring sessions with active tabs is not tested and is not recommended.";
+			Xchat::print "*\tAny changes made will be saved. Networks not in the network list won't be saved correctly unless you reconnect to them.";
+			Xchat::print "*\tUse /restore to force restore the session and enable saving.";	
+		}
+
+		notify() if $notify && $autosave;
 		return 0;
 	}
 
@@ -190,7 +211,10 @@ sub load {
 sub restore {
 	if (!-e $file) {
 		$connecting = 0;
+
 		Xchat::print "*\tNo session file found!";
+		notify() if $notify && $autosave;
+
 		return 0;
 	}
 
@@ -226,13 +250,22 @@ sub restore {
 		#it should be enough to connect to most servers
 		Xchat::hook_timer 60_000 + ($delay * scalar @$session), sub {
 			$connecting = 0;
+
+			notify() if $notify && $autosave;
+
 			return Xchat::REMOVE;
-		}
+		};
+
+		#join channels on motd end
+		$motd = Xchat::hook_server $_, \&join_channels, for qw|376 422|;
 	};
 
 	if ($@) {
 		$connecting = 0;
+
 		Xchat::print "*\tCould not restore session ($@)";
+		notify() if $notify && $autosave;
+
 		return 0;
 	}
 
@@ -491,4 +524,8 @@ sub join_channels_keys {
 	@keys = map { $_ || 'x' } @keys;
 
 	return join(',', @channels) . ' ' . join(',', @keys);
+}
+
+sub notify {
+	return Xchat::print 'Sessions are now being automatically saved.';
 }
