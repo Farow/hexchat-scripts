@@ -19,8 +19,8 @@ my @whois_show   = (
 	'WhoIs Special',
 );
 
-Xchat::register 'Whois on PM', '1.02', 'Sends a Whois request when someone sends you a PM and display the response in the new tab.';
-Xchat::hook_print 'Open Dialog', \&new_context;
+Xchat::register 'Whois on PM', '1.03', 'Sends a Whois request when someone sends you a PM and display the response in the new tab.';
+Xchat::hook_print 'Open Dialog', \&new_dialog;
 Xchat::hook_print $_, \&message, { 'data' => $_ } for 'Private Action to Dialog', 'Private Message to Dialog';
 
 my $hooks = { };
@@ -38,7 +38,7 @@ my @whois = (
 	'WhoIs Special',
 );
 
-sub new_context {
+sub new_dialog {
 	my $context     = Xchat::get_context;
 	my ($id, $nick) = map { Xchat::get_info $_ } qw|id channel|;
 
@@ -63,7 +63,7 @@ sub new_context {
 	} @whois_show ];
 
 	#eat messages not in @whois_show
-	push $hooks->{ $context }{'whois'}, [
+	push $hooks->{ $context }{'whois'},
 		map {
 			Xchat::hook_print $_, sub {
 				my ($data, $event) = @_;
@@ -78,20 +78,23 @@ sub new_context {
 		}
 		grep {
 			my $event = $_;
-			!grep { $_ eq $event } @whois
+			!grep { $_ eq $event } @whois_show
 		}
-	@whois ];
+	@whois;
 
 	#remove hooks on whois end
 	push $hooks->{ $context }{'whois'}, Xchat::hook_print 'WhoIs End', sub {
-		#display messages if we received this before $delay
-		if (exists $hooks->{ $context }{'timer'}) {
-			display_messages($context);
+		#but let hexchat see it first
+		Xchat::hook_timer 0 , sub {
+			#if we got here before the timer, unhook it and display any caught messages
+			if (exists $hooks->{ $context }{'timer'}) {
+				Xchat::unhook delete $hooks->{ $context }{'timer'};
 
-			#unhook display timer
-			Xchat::unhook delete $hooks->{ $context }{'timer'};
-		}
-		unhook($context);
+				display_messages($context);
+			}
+
+			unhook($context);
+		};
 
 		return Xchat::EAT_NONE;
 	};
@@ -111,9 +114,13 @@ sub message {
 		#only hook one timer for displaying messages
 		if (!exists $hooks->{ $context }{'timer'}) {
 			$hooks->{ $context }{'timer'} = Xchat::hook_timer $delay, sub {
+				#if we get here it means we haven't received a whois end yet
 				display_messages($context);
-				delete $hooks->{ $context }{'timer'};
 
+				#so just print any new messages without a delay
+				$hooks->{ $context }{'skip'} = 1;
+
+				delete $hooks->{ $context }{'timer'};
 				return Xchat::REMOVE;
 			};
 		}
@@ -152,7 +159,7 @@ sub unhook {
 
 	Xchat::unhook $_ for @$whois_hooks;
 
- 	delete $hooks->{ $context };
+	delete $hooks->{ $context };
 
 	return 0;
 }
