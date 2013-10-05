@@ -14,10 +14,13 @@ Some of these scripts might provide a few settings but you'll have to modify the
 **[force-specified-colours.pl](force-specified-colours.pl)** - Removes all formating from the text events you specify so that your current formatting can be used for the whole event.  
 **[hide-whois-end.pl](hide-whois-end.pl)** - Hides whois end messages.  
 **[identifier.pl](identifier.pl)** ([see remarks](#identifier)) - Automatically ghosts, changes nick and identifies with NickServ.  
+[ *n* ] **[light-ignore.pl](light-ignore.pl)** ([see remarks](#lignore)) - A lighter version of `/ignore`. Messages from users ignored by this script will show up in the server tab.  
 **[linebreak.pl](linebreak.pl)** - Inserts an invisible line break by pressing Shift-Enter.  
 **[notice2server.pl](notice2server.pl)** - Forces notices from some nicks to be displayed in the server tab.  
 **[one-instance.pl](one-instance.pl)** Only allows one instance of HexChat running and brings the existing instance to front. Requires `Win32::Event` and is only for Windows as HexChat does this on Linux.  
+[ *n* ] **[reconnect.pl](reconnect.pl)** - Reconnects if HexChat doesn't receive a message for a specified amount of time as it will sometimes just wait indefinitely without reconnecting.  
 [ *u* ] **[session.pl](session.pl)** ([see remarks](#session)) - Restores your last used networks, channels and nicks.  
+[ *n* ] **[u2s.pl](u2s.pl)** - Same deal as with notice2server.pl but for changes in your user mode.  
 **[undo-redo.pl](undo-redo.pl)** - Adds undo and redo functionality to the inputbox.  
 [ *u* ] **[whois-on-pm.pl](whois-on-pm.pl)** - Sends a whois when you get a new private dialog is created.
 
@@ -63,6 +66,23 @@ $networks = {
 ```
 The way this script works is by not letting HexChat see the 376 (motd end) message until you have been identified or 15s after it is received, provided that no notices have been sent or recognized from NickServ (in case the services are down or the nick is not registered). Not letting HexChat see a motd end message can have side-effects such as lag not being calculated.  
 Finally, by setting your NickServ password in the password field, you will most likely be unable to connect to servers (or use SASL) that require a password (/pass). If you want this fixed, let me know as I don't know use any of those.
+
+<a name="lignore" />
+#### [light-ignore.pl](light-ignore.pl)
+Any users ignored by this script will have their messages and notices stripped of any formatting and placed in the server tab. You will also not be highlighted by these messages.  
+Usage:
+- `/lignore` - Behaves pretty much the same way as `/ignore`.
+- `/lremove` - Removes an ignore added via `/lignore`.
+- `/lclear` - Removes all ignores.
+- `/llist` - Lists all ignores.
+There are also shorter commands for these: `/li`, `/lr`, `/lc` and `/ll` respectively. Note that these commands work on the specific network they're used on.
+
+You can customize the way the messages appear in a similar way you do with Text Events.
+- `&n` - the nick of the ignored user
+- `&c` - the name of the channel the message comes from (or your own nick if it's a private message)
+- `&m` - the message
+- `\t` - the separator used by HexChat
+For more ways to format the message take a look at [XChatData's Text Formatting](http://xchatdata.net/Scripting/TextFormatting).
 
 <a name="session" />
 #### [session.pl](session.pl)
