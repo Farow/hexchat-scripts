@@ -4,7 +4,7 @@ use Xchat;
 #reconnect timeout
 my $timeout = 1000 * 60 * 5; #5m
 
-Xchat::register 'Reconnect', '1.00', 'Reconnects when no message has been seen from a server in a while.';
+Xchat::register 'Reconnect', '1.01', 'Reconnects when no message has been seen from a server in a while.';
 Xchat::hook_server 'RAW LINE', \&got_message;
 
 Xchat::hook_print 'Close Context', \&close_tab;
@@ -22,7 +22,11 @@ sub got_message {
 }
 
 sub reconnect {
-	Xchat::command 'reconnect';
+	Xchat::hook_timer 0, sub {
+		Xchat::command 'discon';
+		Xchat::command 'reconnect';
+		return Xchat::EAT_NONE;
+	};
 	return Xchat::REMOVE;
 }
 

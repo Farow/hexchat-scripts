@@ -19,7 +19,8 @@ Some of these scripts might provide a few settings but you'll have to modify the
 **[notice2server.pl](notice2server.pl)** - Forces notices from some nicks to be displayed in the server tab.  
 **[one-instance.pl](one-instance.pl)** Only allows one instance of HexChat running and brings the existing instance to front. Requires `Win32::Event` and is only for Windows as HexChat does this on Linux.  
 [ *n* ] **[reconnect.pl](reconnect.pl)** - Reconnects if HexChat doesn't receive a message for a specified amount of time as it will sometimes just wait indefinitely without reconnecting.  
-[ *u* ] **[session.pl](session.pl)** ([see remarks](#session)) - Restores your last used networks, channels and nicks.  
+[ *n* ] **[server-send-raw.pl](server-send-raw.pl)** - Sends whatever you type in a server tab to the server.  
+**[session.pl](session.pl)** ([see remarks](#session)) - Restores your last used networks, channels and nicks.  
 [ *n* ] **[u2s.pl](u2s.pl)** - Same deal as with notice2server.pl but for changes in your user mode.  
 **[undo-redo.pl](undo-redo.pl)** - Adds undo and redo functionality to the inputbox.  
 [ *u* ] **[whois-on-pm.pl](whois-on-pm.pl)** - Sends a whois when you get a new private dialog is created.
@@ -109,6 +110,7 @@ Scripts made by others that I actually use and find (somewhat) useful.
 
 #### Other
 - [b0at](http://b0at.tx0.org/xchat/addons/addons.html)
+- [Digital Dilemma](http://digdilem.org/irc/index.cgi?perpage=all&type=Xchat)
 - [Orvp](http://orvp.net/xchat.php)
 - [Sam Hocevar](http://lwsitu.com/xchat/)
-- [Xchat](http://xchat.org/cgi-bin/disp.pl) (mostly broken links)
+- [Xchat](http://xchat.org/cgi-bin/disp.pl) (mostly broken links, [archive of available scripts](https://dl.dropboxusercontent.com/s/rb85dqkjhygekkh/xchat.zip) - use at your own rist)
