@@ -4,11 +4,13 @@ use Xchat;
 Xchat::register 'User mode to server tab', '1.00', 'Displays any user mode changes in the server tab.';
 Xchat::hook_print 'Channel Mode Generic', \&generic_mode_change;
 
+my $regex = qr/(?:^[#&]| )/io;
+
 sub generic_mode_change {
 	my ($data) = @_;
 
 	#for channel modes, $data->[3] is "#channel nick"
-	return Xchat::EAT_NONE if $data->[3] =~ m/ /;
+	return Xchat::EAT_NONE if $data->[3] =~ $regex;
 
 	my $server_tab = server_tab();
 	return Xchat::EAT_NONE if Xchat::get_context eq $server_tab;
