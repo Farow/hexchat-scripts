@@ -6,7 +6,7 @@ Some of these scripts might provide a few settings but you'll have to modify the
 
 **[autocomplete-no-spaces.pl](autocomplete-no-spaces.pl)** - Removes the space that is inserted after completing a nick, after a change is detected. You can also add regex rules for when not to remove the space.  
 ~~**[channel-mode-prefix.pl](channel-mode-prefix.pl)**~~ (see [tab-name.pl](tab-name.pl) instead) - Adds your mode symbol at the beginning of the tab name.  
-**[coloured-highlights.pl](coloured-highlights.pl)** - Colours the nicks (and optionally the message) when you are highlighted, since HexChat doesn't do it.  
+[ *u* ] **[coloured-highlights.pl](coloured-highlights.pl)** - Colours the nicks (and optionally the message) when you are highlighted, since HexChat doesn't do it.  
 **[ctrl-enter.pl](ctrl-enter.pl)** - Sends the text in the inputbox to the server without any processing.  
 **[eval.pl](eval.pl)** - Evaluates Perl code via `/eval` and displays the results with `Data::Dumper`.  
 **[file-completition.pl](file-completition.pl)** - Completes filenames with Shift-Tab (or just Tab for specified commands).  
@@ -21,10 +21,10 @@ Some of these scripts might provide a few settings but you'll have to modify the
 ~~**[reconnect.pl](reconnect.pl)**~~ (unstable) - Reconnects if HexChat doesn't receive a message for a specified amount of time as it will sometimes just wait indefinitely without reconnecting.  
 [ *n* ] **[server-send-raw.pl](server-send-raw.pl)** - Sends whatever you type in a server tab to the server.  
 **[session.pl](session.pl)** ([see remarks](#session)) - Restores your last used networks, channels and nicks.  
-[ *n* ] **[tab-name.pl](tab-name.pl)** - Adds channel modes and unread messages to your tab names.  
+[ *n* ] **[tab-name.pl](tab-name.pl)** - Adds channel modes and an unread messages counter to your tab names.  
 [ *n* ] **[u2s.pl](u2s.pl)** - Same deal as with notice2server.pl but for changes in your user mode.  
 **[undo-redo.pl](undo-redo.pl)** - Adds undo and redo functionality to the inputbox.  
-[ *u* ] **[whois-on-pm.pl](whois-on-pm.pl)** - Sends a whois when you get a new private dialog is created.
+**[whois-on-pm.pl](whois-on-pm.pl)** - Sends a whois when you get a new private dialog is created.
 
 Legend: [ *u* ] - recently updated, [ *n* ] - new
 

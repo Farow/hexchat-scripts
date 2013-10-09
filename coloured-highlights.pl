@@ -4,7 +4,7 @@ use Xchat;
 #colour the messages the same as the nick
 my $colour_messages = 1;
 
-Xchat::register 'Coloured highlights', '1.00', 'Colours the nicks and optionally the message on highlights, the same way HexChat would colour a nick.';
+Xchat::register 'Coloured highlights', '1.01', 'Colours the nicks and optionally the message on highlights, the same way HexChat would colour a nick.';
 Xchat::hook_print $_, \&force_colour, { 'data' => $_ } for 'Channel Action Hilight', 'Channel Msg Hilight';
 
 sub force_colour {
@@ -48,7 +48,7 @@ sub force_colour {
 
 	Xchat::emit_print $event, $nick, @$data;
 
-	return Xchat::EAT_XCHAT;
+	return Xchat::EAT_ALL;
 }
 
 sub colour {
