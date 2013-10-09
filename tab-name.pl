@@ -41,7 +41,7 @@ my @events = (
 	#'Quit',
 );
 
-Xchat::register 'Tab name', '1.02', 'Get more information out of your tab names.';
+Xchat::register 'Tab name', '1.03', 'Get more information out of your tab names.';
 
 Xchat::hook_print 'Close Context', \&clean_up;
 
@@ -269,18 +269,18 @@ sub update_all {
 	#update with new values
 	$max_unread_length = max map { length $data->{ $_ }{'unread'} } keys $data;
 
-	return if !$align;
+	if ($align) {
+		$max_channel_length = max map {
+			#length of the channel
+			length($_->{'channel'}) +
 
-	$max_channel_length = max map {
-		#length of the channel
-		length($_->{'channel'}) +
+			#mode
+			($format_unread =~ /%m/ && _user_prefix($_->{'context'}) ? 1 : 0) + 
 
-		#mode
-		($format_unread =~ /%m/ && _user_prefix($_->{'context'}) ? 1 : 0) + 
-
-		#one space
-		1
-	} Xchat::get_list 'channels';
+			#one space
+			1
+		} Xchat::get_list 'channels';
+	}
 
 	#check for changes
 	if ($last_unread_length != $max_unread_length || $last_channel_length != $max_channel_length) {
