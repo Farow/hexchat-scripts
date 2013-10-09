@@ -224,7 +224,6 @@ sub update_name {
 		$name =~ s/%m/$mode/;
 		$name =~ s/%c/$channel/;
 
-
 		#right align with spaces if enabled
 		if ($right_align_unread) {
 			$name =~ s/%u/sprintf '%*d', $max_unread_length, $data->{ $context }{'unread'}/e;
@@ -282,8 +281,6 @@ sub update_all {
 		#one space
 		1
 	} Xchat::get_list 'channels';
-
-	Xchat::print "-$max_channel_length";
 
 	#check for changes
 	if ($last_unread_length != $max_unread_length || $last_channel_length != $max_channel_length) {
