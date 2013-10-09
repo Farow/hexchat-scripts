@@ -7,20 +7,23 @@ use Xchat;
 #%c is the name of the tab/channel
 #%u is the amount of unread messages
 #%; is the separator that enables aligning
-my $format             = '%m%c';
-my $format_unread      = '%m%c%;%u';
+my $format                 = '%m%c';
+my $format_unread          = '%m%c%;%u';
 
 #whether to align anything after %; to the right
-my $align              = 1;
+my $align                  = 1;
 
 #only align up to the longest channel (might be somewhat slower)
-my $align_min          = 0;
+my $align_min              = 0;
 
 #never align past this value
-my $max_length         = 20; #HexChat's default, if you want to increase this, also increase gui_tab_trunc in HexChat
+my $max_length             = 20; #HexChat's default, if you want to increase this, also increase gui_tab_trunc in HexChat
 
 #whether to right align the unread messages number to the largest unread messages number
-my $right_align_unread = 1;
+my $right_align_unread     = 1;
+
+#whether to use a counter on server tabs
+my $disable_server_on_tabs = 1;
 
 #text events that increase the message counter
 my @events = (
@@ -38,22 +41,28 @@ my @events = (
 	#'Quit',
 );
 
-Xchat::register 'Tab name', '1.01', 'Get more information out of your tab names.';
+Xchat::register 'Tab name', '1.02', 'Get more information out of your tab names.';
 
-Xchat::hook_print 'Focus Tab', \&reset_unread;
 Xchat::hook_print 'Close Context', \&clean_up;
-Xchat::hook_print $_, \&check_unread for @events;
-Xchat::hook_print 'You Join', \&update_join;
+
+#for channel unread messages changes
+if ($format =~ /%u/ || $format_unread =~ /%u/) {
+	Xchat::hook_print 'Focus Tab', \&reset_unread;
+	Xchat::hook_print $_, \&check_unread for @events;
+	Xchat::hook_print 'You Join', \&update_join;
+}
 
 #for channel mode changes
-Xchat::hook_print 'Channel Mode Generic', \&generic_mode_change;
-Xchat::hook_print $_, \&mode_change, { 'data' => $_ }
-	for 'Channel Voice',         'Channel DeVoice',
-		'Channel Half-Operator', 'Channel DeHalfOp',
-		'Channel Operator',      'Channel DeOp';
+if ($format =~ /%m/ || $format_unread =~ /%m/) {
+	Xchat::hook_print 'Channel Mode Generic', \&generic_mode_change;
+	Xchat::hook_print $_, \&mode_change, { 'data' => $_ }
+		for 'Channel Voice',         'Channel DeVoice',
+			'Channel Half-Operator', 'Channel DeHalfOp',
+			'Channel Operator',      'Channel DeOp';
 
-#for getting the mode correctly in unregistered channels
-Xchat::hook_server '353', \&channel_join;
+	#for getting the mode correctly in unregistered channels
+	Xchat::hook_server '353', \&channel_join;
+}
 
 my $data               = { };
 my $active_tab         = Xchat::get_context;
@@ -66,6 +75,7 @@ sub reset_unread {
 
 	$active_tab = $context;
 
+	return Xchat::EAT_NONE if $disable_server_on_tabs && Xchat::context_info->{'type'} == 1;
 	return Xchat::EAT_NONE if !length $channel;
 
 	$data->{ $context }{'unread'} = 0;
@@ -78,6 +88,8 @@ sub reset_unread {
 
 sub clean_up {
 	my $context = Xchat::get_context;
+
+	return Xchat::EAT_NONE if $disable_server_on_tabs && Xchat::context_info->{'type'} == 1;
 
 	if (exists $data->{ $context }) {
 		delete $data->{ $context };
@@ -92,6 +104,7 @@ sub check_unread {
 	my $context = Xchat::get_context;
 	my $channel = Xchat::get_info 'channel';
 
+	return Xchat::EAT_NONE if $disable_server_on_tabs && Xchat::context_info->{'type'} == 1;
 	return Xchat::EAT_NONE if $context == $active_tab || !length $channel;
 
 	$data->{ $context }{'unread'}++;
@@ -107,6 +120,7 @@ sub update_join {
 	my $context = Xchat::get_context;
 	my $channel = Xchat::get_info 'channel';
 
+	return Xchat::EAT_NONE if $disable_server_on_tabs && Xchat::context_info->{'type'} == 1;
 	return Xchat::EAT_NONE if !exists $data->{ $context };
 
 	update_name($context, $channel);
@@ -118,6 +132,8 @@ sub generic_mode_change {
 	my ($word)  = @_;
 	my $context = Xchat::get_context;
 	my $channel = Xchat::get_info 'channel';
+
+	return Xchat::EAT_NONE if Xchat::context_info->{'type'} != 2;
 
 	#for channel modes, $word->[3] is "#channel nick"
 	return Xchat::EAT_NONE if $word->[3] !~ m/ /;
@@ -138,6 +154,7 @@ sub mode_change {
 	my $context = Xchat::get_context;
 	my $channel = Xchat::get_info 'channel';
 
+	return Xchat::EAT_NONE if Xchat::context_info->{'type'} != 2;
 	return Xchat::EAT_NONE if fc $nick ne fc $word->[1];
 
 	delay(\&set_mode, $context, $channel);
@@ -200,12 +217,13 @@ sub update_name {
 		}
 		#otherwise, add spaces so that we reach the limit
 		elsif ($tab_length < $limit) {
-			$spaces = $limit - $tab_length;
+			$spaces = 1 + $limit - $tab_length;
 		}
 
 		#replace mode character and channel name
 		$name =~ s/%m/$mode/;
 		$name =~ s/%c/$channel/;
+
 
 		#right align with spaces if enabled
 		if ($right_align_unread) {
@@ -217,12 +235,26 @@ sub update_name {
 
 		#turn into spaces and replace
 		$spaces  = ' ' x $spaces;
-		$name   =~ s/%;/$spaces/g;
+		$name   =~ s/%;/$spaces/;
 	}
 	else {
-		$name =~ s/%m/$mode/g;
-		$name =~ s/%c/$channel/g;
-		$name =~ s/%u/$data->{ $context }{'unread'}/g if $data->{ $context }{'unread'};
+		$name =~ s/%m/$mode/;
+		$name =~ s/%c/$channel/;
+
+		#replace %u here with $max_unread_length
+		if ($data->{ $context }{'unread'}) {
+			if ($right_align_unread) {
+				$name =~ s/%u/sprintf '%*d', $max_unread_length, $data->{ $context }{'unread'}/e;
+			}
+			else {
+				$name =~ s/%u/$data->{ $context }{'unread'}/;
+			}
+		}
+
+		#replace with spaces to allow some custom formatting
+		else {
+			$name =~ s/%u/' ' x $max_unread_length/e; # if $data->{ $context }{'unread'};
+		}
 	}
 
 	Xchat::set_context $context;
@@ -232,25 +264,26 @@ sub update_name {
 }
 
 sub update_all {
-	return if !$align;
 	state $last_unread_length;
 	state $last_channel_length;
 
 	#update with new values
-	$max_unread_length  = max map { length $data->{ $_ }{'unread'}  } keys $data;
+	$max_unread_length = max map { length $data->{ $_ }{'unread'} } keys $data;
 
-	if ($align_min) {
-		$max_channel_length = max map {
-			#length of the channel
-			length($_->{'channel'}) +
+	return if !$align;
 
-			#mode
-			($format_unread =~ /%m/ && _user_prefix($_->{'context'}) ? 1 : 0) + 
+	$max_channel_length = max map {
+		#length of the channel
+		length($_->{'channel'}) +
 
-			#one space
-			1
-		} Xchat::get_list 'channels';
-	}
+		#mode
+		($format_unread =~ /%m/ && _user_prefix($_->{'context'}) ? 1 : 0) + 
+
+		#one space
+		1
+	} Xchat::get_list 'channels';
+
+	Xchat::print "-$max_channel_length";
 
 	#check for changes
 	if ($last_unread_length != $max_unread_length || $last_channel_length != $max_channel_length) {
