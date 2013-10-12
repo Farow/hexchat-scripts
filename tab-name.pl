@@ -41,7 +41,7 @@ my @events = (
 	#'Quit',
 );
 
-Xchat::register 'Tab name', '1.03', 'Get more information out of your tab names.';
+Xchat::register 'Tab name', '1.04', 'Get more information out of your tab names.';
 
 Xchat::hook_print 'Close Context', \&clean_up;
 
@@ -63,6 +63,8 @@ if ($format =~ /%m/ || $format_unread =~ /%m/) {
 	#for getting the mode correctly in unregistered channels
 	Xchat::hook_server '353', \&channel_join;
 }
+
+Xchat::hook_command 'allread', \&allread;
 
 my $data               = { };
 my $active_tab         = Xchat::get_context;
@@ -160,6 +162,18 @@ sub mode_change {
 	delay(\&set_mode, $context, $channel);
 
 	return Xchat::EAT_NONE;
+}
+
+sub allread {
+	$data = { };
+
+	for (Xchat::get_list 'channels') {
+		Xchat::set_context $_->{'context'};
+		Xchat::command 'gui color 0';
+	}
+
+	update_all();
+	return Xchat::EAT_ALL;
 }
 
 sub channel_join {
