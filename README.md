@@ -21,7 +21,7 @@ Some of these scripts might provide a few settings but you'll have to modify the
 ~~**[reconnect.pl](reconnect.pl)**~~ (unstable) - Reconnects if HexChat doesn't receive a message for a specified amount of time as it will sometimes just wait indefinitely without reconnecting.  
 **[server-send-raw.pl](server-send-raw.pl)** - Sends whatever you type in a server tab to the server.  
 **[session.pl](session.pl)** ([see remarks](#session)) - Restores your last used networks, channels and nicks.  
-[ *u* ] **[tab-name.pl](tab-name.pl)** - Adds channel modes and an unread messages counter to your tab names.  
+[ *u* ] **[tab-name.pl](tab-name.pl)** ([see remarks](#tabname)) - Adds channel modes and an unread messages counter to your tab names.
 **[u2s.pl](u2s.pl)** - Same deal as with notice2server.pl but for changes in your user mode.  
 **[undo-redo.pl](undo-redo.pl)** - Adds undo and redo functionality to the inputbox.  
 **[whois-on-pm.pl](whois-on-pm.pl)** - Sends a whois when you get a new private dialog is created.
@@ -94,6 +94,30 @@ Usage:
 
 Any changes from the point of loading the script will be saved and restored when you next start HexChat. However, while starting up, any changes won't be saved for about a minute, to give HexChat some time to connect and join channels. You can disable autosaving and use `/save` and `/restore` to save and restore the session manually.  
 Inspired by [TingPing's session.py](https://github.com/TingPing/plugins/blob/master/HexChat/session.py).
+
+<a name="tabname" />
+#### [tab-name.pl](tab-name.pl)
+Changes the names of your tabs by adding more (useful) information to them. Currently you can add your channel mode symbol and the amount of unread messages to the tabs. You can customize the way your tab is named by changing the `$format` and `$format_unread` variables.
+- `%c` - the name of the tab as seen by HexChat
+- `%u` - the amount of unread messages
+- `%m` - your channel mode symbol
+- `%;` - the separator in case aligning is enabled
+
+If aligning is enabled, `%;` will be turned into spaces when applying the name of the tab. If minimum aligning is enabled the separator will turn into as few spaces as possible so that the same aligning applies to all the channels. Otherwise it will take as many spaces as it can so that it fits the maximum length of the tab. Channels with long names will be stripped of some characters so that all the information specified in the format fit. For example, with minimum alignment you can expect
+```
+#channel    |4
+#longername |2
+```
+while without it will be
+```
+#channel          |4
+#longername       |2
+```
+
+When you have no unread messages, `%u` is turned into spaces depending on how many digits the largest unread messages counter. With this you can achieve a nice formatting with the unread counter on the left:
+```
+my $format        = ' %u  %c';
+my $format_unread = '(%u) %c';
 
 ### Useful scripts made by others
 Scripts made by others that I actually use and find (somewhat) useful.

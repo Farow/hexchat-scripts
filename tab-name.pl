@@ -22,8 +22,23 @@ my $max_length             = 20; #HexChat's default, if you want to increase thi
 #whether to right align the unread messages number to the largest unread messages number
 my $right_align_unread     = 1;
 
-#whether to use a counter on server tabs
-my $disable_server_on_tabs = 1;
+#specify on what kind of tabs the script works
+my $working_tabs = [
+	1, #server
+	2, #channel
+	3, #dialog
+	4, #notices
+	5, #server notices
+];
+
+#same as above but specify what kind of tabs /allread works on
+my $allread_working_tabs = [
+	1,
+	2,
+	3,
+	4,
+	5,
+];
 
 #text events that increase the message counter
 my @events = (
@@ -41,7 +56,7 @@ my @events = (
 	#'Quit',
 );
 
-Xchat::register 'Tab name', '1.04', 'Get more information out of your tab names.';
+Xchat::register 'Tab name', '1.05', 'Get more information out of your tab names.';
 
 Xchat::hook_print 'Close Context', \&clean_up;
 
@@ -74,10 +89,11 @@ my $max_channel_length = 0;
 sub reset_unread {
 	my $context = Xchat::get_context;
 	my $channel = Xchat::get_info 'channel';
+	my $type    = Xchat::context_info->{'type'};
 
 	$active_tab = $context;
 
-	return Xchat::EAT_NONE if $disable_server_on_tabs && Xchat::context_info->{'type'} == 1;
+	return Xchat::EAT_NONE if !grep { $_ == $type } @$working_tabs;
 	return Xchat::EAT_NONE if !length $channel;
 
 	$data->{ $context }{'unread'} = 0;
@@ -90,8 +106,9 @@ sub reset_unread {
 
 sub clean_up {
 	my $context = Xchat::get_context;
+	my $type    = Xchat::context_info->{'type'};
 
-	return Xchat::EAT_NONE if $disable_server_on_tabs && Xchat::context_info->{'type'} == 1;
+	return Xchat::EAT_NONE if !grep { $_ == $type } @$working_tabs;
 
 	if (exists $data->{ $context }) {
 		delete $data->{ $context };
@@ -105,8 +122,9 @@ sub clean_up {
 sub check_unread {
 	my $context = Xchat::get_context;
 	my $channel = Xchat::get_info 'channel';
+	my $type    = Xchat::context_info->{'type'};
 
-	return Xchat::EAT_NONE if $disable_server_on_tabs && Xchat::context_info->{'type'} == 1;
+	return Xchat::EAT_NONE if !grep { $_ == $type } @$working_tabs;
 	return Xchat::EAT_NONE if $context == $active_tab || !length $channel;
 
 	$data->{ $context }{'unread'}++;
@@ -121,8 +139,9 @@ sub check_unread {
 sub update_join {
 	my $context = Xchat::get_context;
 	my $channel = Xchat::get_info 'channel';
+	my $type    = Xchat::context_info->{'type'};
 
-	return Xchat::EAT_NONE if $disable_server_on_tabs && Xchat::context_info->{'type'} == 1;
+	return Xchat::EAT_NONE if !grep { $_ == $type } @$working_tabs;
 	return Xchat::EAT_NONE if !exists $data->{ $context };
 
 	update_name($context, $channel);
@@ -169,6 +188,11 @@ sub allread {
 
 	for (Xchat::get_list 'channels') {
 		Xchat::set_context $_->{'context'};
+
+		my $type = Xchat::context_info->{'type'};
+		next if !grep { $_ == $type } @$allread_working_tabs;
+
+		delete $data->{ $_->{'context'} };
 		Xchat::command 'gui color 0';
 	}
 
@@ -289,7 +313,7 @@ sub update_all {
 			length($_->{'channel'}) +
 
 			#mode
-			($format_unread =~ /%m/ && _user_prefix($_->{'context'}) ? 1 : 0) + 
+			($format_unread =~ /%m/ && _user_prefix($_->{'context'}) ? 1 : 0) +
 
 			#one space
 			1
