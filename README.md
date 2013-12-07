@@ -118,6 +118,7 @@ When you have no unread messages, `%u` is turned into spaces depending on how ma
 ```
 my $format        = ' %u  %c';
 my $format_unread = '(%u) %c';
+```
 
 ### Useful scripts made by others
 Scripts made by others that I actually use and find (somewhat) useful.
