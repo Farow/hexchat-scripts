@@ -140,4 +140,4 @@ Scripts made by others that I actually use and find (somewhat) useful.
 - [Digital Dilemma](http://digdilem.org/irc/index.cgi?perpage=all&type=Xchat)
 - [Lian Wan Situ](http://lwsitu.com/xchat/)
 - [Orvp](http://orvp.net/xchat.php)
-- [Xchat](http://xchat.org/cgi-bin/disp.pl) (mostly broken links, [archive of available scripts](https://dl.dropboxusercontent.com/s/rb85dqkjhygekkh/xchat.zip) - use at your own rist)
+- [Xchat](http://xchat.org/cgi-bin/disp.pl) (mostly broken links, [archive of available scripts](https://dl.dropboxusercontent.com/s/rb85dqkjhygekkh/xchat.zip) - use at your own risk, [watered-down list](https://dl.dropboxusercontent.com/s/30t4b2y8ocup07c/xchat.zip) - somewhat useful ones)
