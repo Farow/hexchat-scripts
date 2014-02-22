@@ -2,16 +2,16 @@ use common::sense;
 use Xchat;
 
 #maximum amount of time to wait before printing received messages
-my $delay        = 3000;
+my $delay      = 3000;
 
 #use /whois nick nick to get idle information
-my $idle_info    = 0;
+my $idle_info  = 0;
 
 #log whois messages
-my $log          = 0;
+my $log        = 0;
 
 #log whois messages to scrollback
-my $scrollback   = 0;
+my $scrollback = 0;
 
 #choose which messages to display
 my @whois_show   = (
@@ -26,6 +26,11 @@ my @whois_show   = (
 	'WhoIs Real Host',
 	'WhoIs Server Line',
 	'WhoIs Special',
+);
+
+#ignore certain nicks
+my @ignore     = (
+	qr/^\*/,
 );
 
 Xchat::register 'Whois on PM', '1.04', 'Sends a Whois request when someone sends you a PM and display the response in the new tab.';
@@ -50,6 +55,10 @@ my @whois = (
 sub new_dialog {
 	my $context     = Xchat::get_context;
 	my ($id, $nick) = map { Xchat::get_info $_ } qw|id channel|;
+
+	for (@ignore) {
+		return if $nick =~ /$_/;
+	}
 
 	#store the whois hooks so as to unload them after whois end
 	$hooks->{ $context }{'whois'} = [ map {
