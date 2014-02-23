@@ -16,12 +16,13 @@ Some of these scripts might provide a few settings but you'll have to modify the
 **[identifier.pl](identifier.pl)** ([see remarks](#identifier)) - Automatically ghosts, changes nick and identifies with NickServ.  
 **[light-ignore.pl](light-ignore.pl)** ([see remarks](#lignore)) - A lighter version of `/ignore`. Messages from users ignored by this script will show up in the server tab.  
 **[linebreak.pl](linebreak.pl)** - Inserts an invisible line break by pressing Shift-Enter.  
+[ *n* ] **[no-alert-on-pm.pl](no-alert-on-pm.pl)** - Disables alerts for specified nicks.  
 **[notice2server.pl](notice2server.pl)** - Forces notices from some nicks to be displayed in the server tab.  
 **[one-instance.pl](one-instance.pl)** Only allows one instance of HexChat running and brings the existing instance to front. Requires `Win32::Event` and is only for Windows as HexChat does this on Linux.  
 ~~**[reconnect.pl](reconnect.pl)**~~ (unstable) - Reconnects if HexChat doesn't receive a message for a specified amount of time as it will sometimes just wait indefinitely without reconnecting.  
 **[server-send-raw.pl](server-send-raw.pl)** - Sends whatever you type in a server tab to the server.  
 **[session.pl](session.pl)** ([see remarks](#session)) - Restores your last used networks, channels and nicks.  
-[ *u* ] **[tab-name.pl](tab-name.pl)** ([see remarks](#tabname)) - Adds channel modes and an unread messages counter to your tab names.
+**[tab-name.pl](tab-name.pl)** ([see remarks](#tabname)) - Adds channel modes and an unread messages counter to your tab names.
 **[u2s.pl](u2s.pl)** - Same deal as with notice2server.pl but for changes in your user mode.  
 **[undo-redo.pl](undo-redo.pl)** - Adds undo and redo functionality to the inputbox.  
 **[whois-on-pm.pl](whois-on-pm.pl)** - Sends a whois when you get a new private dialog is created.
