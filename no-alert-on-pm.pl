@@ -4,7 +4,7 @@ use Data::Dumper;
 
 my @nicks = (
 	qr/^\*/io,
-	'F9',
+	'Farow',
 );
 
 Xchat::register 'No alerts on private messages', '1.00', 'Disables alerts for specified nicks.';
@@ -17,7 +17,7 @@ my $event_map = {
 	'Private Action to Dialog'  => 'Channel Action',
 };
 
-# let other scripts see private messages then eat emmited ones asap
+# let other scripts see private messages then eat emitted ones asap
 Xchat::hook_print $_, \&pm,  { 'data' => $event_map->{ $_ }, 'priority' => Xchat::PRI_LOWEST } for keys $event_map;
 Xchat::hook_print $_, \&eat, { 'priority' => Xchat::PRI_HIGHEST } for 'Channel Message', 'Channel Action';
 
