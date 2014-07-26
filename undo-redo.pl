@@ -1,8 +1,11 @@
 use common::sense;
 use Xchat;
 
-Xchat::register 'Undo/Redo', '1.01', 'Undo (Ctrl-Z) and redo (Ctrl-Y/Ctrl-Shift-Z) for the inputbox.';
+my $history_limit = 0; #no limit
+
+Xchat::register 'Undo/Redo', '1.02', 'Undo and redo for the inputbox.';
 Xchat::hook_print 'Key Press', \&key_press;
+Xchat::hook_print 'Close Context', \&clean_up;
 
 my @ignore = (
 	65507, #ctrl
@@ -10,13 +13,12 @@ my @ignore = (
 	65513, #alt
 
 	65361, #left
-	65362, #up
+	#65362, #up
 	65363, #right
-	65364, #down
+	#65364, #down
 );
 
-my $undo = { };
-my $redo = { };
+my $history;
 
 sub key_press {
 	my ($key, $modifier) = @{ $_[0] };
@@ -24,66 +26,40 @@ sub key_press {
 	#keys that shouldn't or don't alter the history/text
 	return Xchat::EAT_NONE if grep { $_ == $key } @ignore;
 
+	my $context = Xchat::get_context;
 	my ($network, $channel) = Xchat::get_info('channel'), Xchat::get_info('network');
 
-	my $undo = $undo->{"$network.$channel"} //= [ Xchat::get_info 'inputbox' ];
-	my $redo = $redo->{"$network.$channel"} //= [ ];
+	my $h = $history->{ $context } //= Local::History->new(
+		'limit'   => $history_limit,
+		'initial' => Xchat::get_info 'inputbox',
+	);
 
 	#on enter, empty the lists
 	if ($key == 65293) {
-		@$undo = ('');
-		@$redo = (  );
-
+		$h->clear('');
 		return Xchat::EAT_NONE;
 	}
 
 	#ctrl-z
 	if ($key == 122 && $modifier == 4) {
-		#in order to not have to hit the hotkey twice,
-		#don't set text that is the same as the one in the inputbox
-		#this usually happens on the first undo or redo
-		if (@$undo > 1 && $undo->[-1] eq Xchat::get_info 'inputbox') {
-			push $redo, pop $undo;
-		}
+		set_text($h->previous);
 
-		if (@$undo) {
-			my $text = $undo->[-1];
-
-			#avoid sending last item to $redo
-			if (@$undo > 1) {
-				push $redo, pop $undo;
-			}
-
-			set_text($text);
-		}
-
-		return Xchat::EAT_XCHAT;
+		return Xchat::EAT_ALL;
 	}
 
 	#ctrl-y, or ctrl-shift-z
 	elsif ($key == 121 && $modifier == 4 || $key == 90 && $modifier == 5) {
-		if ($redo->[-1] eq Xchat::get_info 'inputbox') {
-			push $undo, pop $redo;
-		}
+		set_text($h->next);
 
-		if (@$redo) {
-			my $text = pop $redo;
-			push $undo, $text;
-
-			set_text($text);
-		}
-
-		return Xchat::EAT_XCHAT;
+		return Xchat::EAT_ALL;
 	}
 
 	#we have to delay getting the text from the inputbox
 	#because the currently added key has not been added to it yet
 	Xchat::hook_timer 0, sub {
 		my $text = Xchat::get_info 'inputbox';
-		if (!@$undo && length $text || $undo->[-1] ne $text) {
-			push $undo, $text;
-			$redo = [ ];
-		}
+
+		$h->add($text);
 
 		return Xchat::REMOVE;
 	};
@@ -93,6 +69,7 @@ sub key_press {
 
 sub set_text {
 	my ($text) = @_;
+	return if !defined $text;
 
 	my $length = 0 + length $text; #force numeric in case $text is empty
 
@@ -100,4 +77,76 @@ sub set_text {
 	Xchat::command "setcursor $length";
 
 	return 1;
+}
+
+sub clean_up {
+	my $context = Xchat::get_context;
+
+	delete $history->{ $context } if exists $history->{ $context };
+
+	return Xchat::EAT_NONE;
+}
+
+package Local::History;
+
+1;
+
+sub new {
+	my $class = shift;
+	my $self  = {
+		'limit'    => 0,
+		'initial'  => undef,
+		'next'     => [ ],
+		'previous' => [ ],
+
+		@_,
+	};
+
+	$self->{'previous'}[0] = delete $self->{'initial'};
+
+	return bless $self, $class;
+}
+
+sub add {
+	my ($self, $item) = @_;
+
+	#ignore duplicates
+	return if @{ $self->{'previous'} } && $self->{'previous'}[-1] eq $item;
+
+	push $self->{'previous'}, $item;
+	#$cb->($item);
+
+	if ($self->{'limit'} && @{ $self->{'previous'} } > $self->{'limit'}) {
+		Xchat::print 'hi';
+		shift $self->{'previous'};
+	}
+
+	$self->{'next'} = [ ];
+	return scalar @{ $self->{'previous'} }; #amount of items
+}
+
+sub clear {
+	my $self = shift;
+
+	$self->{'previous'} = [ @_ ? $_[0] : $self->{'initial'} ];
+	$self->{'next'} = [ ];
+
+	return;
+}
+
+sub previous {
+	my ($self) = @_;
+	return undef if @{ $self->{'previous'} } == 1;
+
+	push $self->{'next'}, pop $self->{'previous'};
+	return $self->{'previous'}[-1];
+}
+
+sub next {
+	my ($self) = @_;
+	return undef if !@{ $self->{'next'} };
+
+	my $item = pop $self->{'next'};
+	push $self->{'previous'}, $item;
+	return $item;
 }
