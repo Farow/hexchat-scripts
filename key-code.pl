@@ -1,6 +1,5 @@
 use common::sense;
 use Xchat;
-use Data::Dumper;
 
 Xchat::register 'Display key code', '1.00', 'Displays the key code of the next key press.';
 Xchat::hook_command 'k', \&display, {

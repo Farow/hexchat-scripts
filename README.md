@@ -21,7 +21,7 @@ Table of contents:
 **[force-specified-colours.pl](force-specified-colours.pl)** - Removes all formating from the text events you specify so that your current formatting can be used for the whole event.  
 **[hide-whois-end.pl](hide-whois-end.pl)** - Hides whois end messages.  
 **[identifier.pl](identifier.pl)** ([see remarks](#identifier)) - Automatically ghosts, changes nick and identifies with NickServ.  
-[ *n* ] **[key-code.pl](key-code.pl)** - Displays the key code of the next key press.`  
+[ *n* ] **[key-code.pl](key-code.pl)** - Displays the key code of the next key press.  
 **[light-ignore.pl](light-ignore.pl)** ([see remarks](#lignore)) - A lighter version of `/ignore`. Messages from users ignored by this script will show up in the server tab.  
 **[linebreak.pl](linebreak.pl)** - Inserts an invisible line break by pressing Shift-Enter.  
 **[no-alert-on-pm.pl](no-alert-on-pm.pl)** - Disables alerts for specified nicks.  
