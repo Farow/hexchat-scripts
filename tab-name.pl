@@ -16,9 +16,6 @@ my $align                  = 1;
 #only align up to the longest channel (might be somewhat slower)
 my $align_min              = 0;
 
-#never align past this value
-my $max_length             = 20; #HexChat's default, if you want to increase this, also increase gui_tab_trunc in HexChat
-
 #whether to right align the unread messages number to the largest unread messages number
 my $right_align_unread     = 1;
 
@@ -56,7 +53,7 @@ my @events = (
 	#'Quit',
 );
 
-Xchat::register 'Tab name', '1.05', 'Get more information out of your tab names.';
+Xchat::register 'Tab name', '1.06', 'Get more information out of your tab names.';
 
 Xchat::hook_print 'Close Context', \&clean_up;
 
@@ -85,6 +82,7 @@ my $data               = { };
 my $active_tab         = Xchat::get_context;
 my $max_unread_length  = 1;
 my $max_channel_length = 0;
+my $max_length         = Xchat::get_prefs 'gui_tab_trunc'; #never align past this value
 
 sub reset_unread {
 	my $context = Xchat::get_context;
@@ -201,12 +199,13 @@ sub allread {
 }
 
 sub channel_join {
-	my $channel = $_[0][4];
-	my $users   = substr $_[1][5], 1;
-	my $nick    = Xchat::get_info 'nick';
-	my $context = Xchat::get_context;
+	my $channel  = $_[0][4];
+	my $users    = substr $_[1][5], 1;
+	my $nick     = Xchat::get_info 'nick';
+	my $context  = Xchat::find_context($channel);
+	my $prefixes = Xchat::context_info->{'nickprefixes'};
 
-	delay(\&set_mode, $context, $channel) if $users =~ /^.\Q$nick\E/;
+	delay(\&set_mode, $context, $channel) if $users =~ /[\Q$prefixes\E]\Q$nick\E/;
 
 	return Xchat::EAT_NONE;
 }
@@ -336,9 +335,8 @@ sub update_all {
 
 sub set_mode {
 	my ($context, $channel) = @_;
-
 	#make sure it's a channel tab
-	return 0 if Xchat::context_info->{'type'} != 2;
+	return 0 if Xchat::context_info($context)->{'type'} != 2;
 
 	update_name($context, $channel);
 

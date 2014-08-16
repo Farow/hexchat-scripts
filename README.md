@@ -21,17 +21,17 @@ Table of contents:
 **[force-specified-colours.pl](force-specified-colours.pl)** - Removes all formating from the text events you specify so that your current formatting can be used for the whole event.  
 **[hide-whois-end.pl](hide-whois-end.pl)** - Hides whois end messages.  
 **[identifier.pl](identifier.pl)** ([see remarks](#identifier)) - Automatically ghosts, changes nick and identifies with NickServ.  
-[ *n* ] **[key-code.pl](key-code.pl)** - Displays the key code of the next key press.  
+**[key-code.pl](key-code.pl)** - Displays the key code of the next key press.  
 **[light-ignore.pl](light-ignore.pl)** ([see remarks](#lignore)) - A lighter version of `/ignore`. Messages from users ignored by this script will show up in the server tab.  
 **[linebreak.pl](linebreak.pl)** - Inserts an invisible line break by pressing Shift-Enter.  
 **[no-alert-on-pm.pl](no-alert-on-pm.pl)** - Disables alerts for specified nicks.  
 **[notice2server.pl](notice2server.pl)** - Forces notices from some nicks to be displayed in the server tab.  
 **[one-instance.pl](one-instance.pl)** Only allows one instance of HexChat running and brings the existing instance to front. Requires `Win32::Event` and is only for Windows as HexChat does this on Linux.  
 ~~**[reconnect.pl](reconnect.pl)**~~ (unstable) - Reconnects if HexChat doesn't receive a message for a specified amount of time as it will sometimes just wait indefinitely without reconnecting.  
-[ *u* ] **[send-text.pl](send-text.pl)** - Sends the text in the inputbox to the server without any processing.  
+**[send-text.pl](send-text.pl)** - Sends the text in the inputbox to the server without any processing.  
 **[server-send-raw.pl](server-send-raw.pl)** - Sends whatever you type in a server tab to the server.  
 **[session.pl](session.pl)** ([see remarks](#session)) - Restores your last used networks, channels and nicks.  
-**[tab-name.pl](tab-name.pl)** ([see remarks](#tabname)) - Adds channel modes and an unread messages counter to your tab names.  
+[ *u* ] **[tab-name.pl](tab-name.pl)** ([see remarks](#tabname)) - Adds channel modes and an unread messages counter to your tab names.  
 **[u2s.pl](u2s.pl)** - Same deal as with notice2server.pl but for changes in your user mode.  
 **[undo-redo.pl](undo-redo.pl)** - Adds undo and redo functionality to the inputbox.  
 **[whois-on-pm.pl](whois-on-pm.pl)** - Sends a whois when you get a new private dialog is created.  
@@ -149,6 +149,7 @@ Scripts made by others that I actually use and find (somewhat) useful.
 
 #### Other
 - [b0at](http://b0at.tx0.org/xchat/addons/addons.html)
+- [Christopher Welborn](https://bitbucket.org/cjwelborn/py-xchat/src)
 - [Digital Dilemma](http://digdilem.org/irc/index.cgi?perpage=all&type=Xchat)
 - [Lian Wan Situ](http://lwsitu.com/xchat/)
 - [Orvp](http://orvp.net/xchat.php)
