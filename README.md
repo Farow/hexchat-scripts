@@ -34,6 +34,7 @@ Table of contents:
 [ *u* ] **[tab-name.pl](tab-name.pl)** ([see remarks](#tabname)) - Adds channel modes and an unread messages counter to your tab names.  
 **[u2s.pl](u2s.pl)** - Same deal as with notice2server.pl but for changes in your user mode.  
 **[undo-redo.pl](undo-redo.pl)** - Adds undo and redo functionality to the inputbox.  
+[ *n* ] **[viewlog.pl](viewlog.pl)** - Opens the log file of the currect context. Based on Lian Wan Situ's [viewlog](http://lwsitu.com/xchat/viewlog.pl) script with windows specific fixes.  
 **[whois-on-pm.pl](whois-on-pm.pl)** - Sends a whois when you get a new private dialog is created.  
 
 <sub>Legend: [ *u* ] - recently updated, [ *n* ] - new</sub>
@@ -136,7 +137,6 @@ Scripts made by others that I actually use and find (somewhat) useful.
 
 - [Common Denominator](https://github.com/tobiassjosten/xchat-common-denominator)
 - [Mass Highlight Ignore](http://orvp.net/xchat/masshighlightignore/)
-- [Viewlog](http://lwsitu.com/xchat/viewlog.pl)
 
 <a name="othersources" />
 ### Other sources for scripts
