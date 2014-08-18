@@ -32,6 +32,7 @@ Table of contents:
 **[server-send-raw.pl](server-send-raw.pl)** - Sends whatever you type in a server tab to the server.  
 **[session.pl](session.pl)** ([see remarks](#session)) - Restores your last used networks, channels and nicks.  
 [ *u* ] **[tab-name.pl](tab-name.pl)** ([see remarks](#tabname)) - Adds channel modes and an unread messages counter to your tab names.  
+[ *n* ] **[text-event-regex-replace.pl](text-event-regex-replace.pl)** - Regex substitutions for text events.  
 **[u2s.pl](u2s.pl)** - Same deal as with notice2server.pl but for changes in your user mode.  
 **[undo-redo.pl](undo-redo.pl)** - Adds undo and redo functionality to the inputbox.  
 [ *n* ] **[viewlog.pl](viewlog.pl)** - Opens the log file of the currect context. Based on Lian Wan Situ's [viewlog](http://lwsitu.com/xchat/viewlog.pl) script with windows specific fixes.  

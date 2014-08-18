@@ -78,7 +78,6 @@ sub display_file {
 	}
 
 	if ($^O eq 'MSWin32') {
-		Xchat::print 1;
 		return system "start \"\" $viewer \"$filename\"";
 	}
 
