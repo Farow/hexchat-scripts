@@ -35,7 +35,7 @@ sub check {
 
 	for my $w (@$word) {
 		for (@rules) {
-			if ($w =~ s/($_->{'pattern'})/$_->{'replacement'}->()/e) {
+			if ($w =~ s/($_->{'pattern'})/$_->{'replacement'}->()/ge) {
 				$matched = 1;
 			}
 		}
