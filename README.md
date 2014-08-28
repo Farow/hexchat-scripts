@@ -13,8 +13,9 @@ Table of contents:
 
 <a name="list" />
 **[autocomplete-no-spaces.pl](autocomplete-no-spaces.pl)** - Removes the space that is inserted after completing a nick, after a change is detected. You can also add regex rules for when not to remove the space.  
-~~**[channel-mode-prefix.pl](channel-mode-prefix.pl)**~~ (see [tab-name.pl](tab-name.pl) instead) - Adds your mode symbol at the beginning of the tab name.  
-**[coloured-highlights.pl](coloured-highlights.pl)** - Colours the nicks (and optionally the message) when you are highlighted, since HexChat doesn't do it.  
+~~**[channel-mode-prefix.pl](channel-mode-prefix.pl)**~~ - see [tab-name.pl](tab-name.pl)  
+[ *n* ] **[colored-nicks.pl](colored-nicks.pl)** - Colors nicknames in more places.  
+~~**[coloured-highlights.pl](coloured-highlights.pl)**~~ - see [colored-nicks.pl](colored-nicks.pl)  
 **[eval.pl](eval.pl)** - Evaluates Perl code via `/eval` and displays the results with `Data::Dumper`.  
 **[file-completition.pl](file-completition.pl)** - Completes filenames with Shift-Tab (or just Tab for specified commands).  
 **[find-mask.pl](find-mask.pl)** - Finds nicks matching a mask in a channel. Usage: /find <mask>  
@@ -31,11 +32,11 @@ Table of contents:
 **[send-text.pl](send-text.pl)** - Sends the text in the inputbox to the server without any processing.  
 **[server-send-raw.pl](server-send-raw.pl)** - Sends whatever you type in a server tab to the server.  
 **[session.pl](session.pl)** ([see remarks](#session)) - Restores your last used networks, channels and nicks.  
-[ *u* ] **[tab-name.pl](tab-name.pl)** ([see remarks](#tabname)) - Adds channel modes and an unread messages counter to your tab names.  
-[ *n* ] **[text-event-regex-replace.pl](text-event-regex-replace.pl)** - Regex substitutions for text events.  
+**[tab-name.pl](tab-name.pl)** ([see remarks](#tabname)) - Adds channel modes and an unread messages counter to your tab names.  
+**[text-event-regex-replace.pl](text-event-regex-replace.pl)** - Regex substitutions for text events.  
 **[u2s.pl](u2s.pl)** - Same deal as with notice2server.pl but for changes in your user mode.  
 **[undo-redo.pl](undo-redo.pl)** - Adds undo and redo functionality to the inputbox.  
-[ *n* ] **[viewlog.pl](viewlog.pl)** - Opens the log file of the currect context. Based on Lian Wan Situ's [viewlog](http://lwsitu.com/xchat/viewlog.pl) script with windows specific fixes.  
+**[viewlog.pl](viewlog.pl)** - Opens the log file of the currect context. Based on Lian Wan Situ's [viewlog](http://lwsitu.com/xchat/viewlog.pl) script with windows specific fixes.  
 **[whois-on-pm.pl](whois-on-pm.pl)** - Sends a whois when you get a new private dialog is created.  
 
 <sub>Legend: [ *u* ] - recently updated, [ *n* ] - new</sub>
