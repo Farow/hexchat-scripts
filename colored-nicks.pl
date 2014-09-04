@@ -26,7 +26,7 @@ my $events              = {
 	#...
 };
 
-HexChat::register 'Colored nicknames', '1.00', 'Colors nicknames.';
+HexChat::register 'Colored nicknames', '1.01', 'Colors nicknames.';
 HexChat::hook_print $_, \&callback, { 'data' => $_, 'priority' => (HexChat::PRI_HIGHEST + 1) } for keys $events;
 
 sub callback {
@@ -51,7 +51,7 @@ sub callback {
 		my @nicknames = map { $_->{'nick'} } HexChat::get_list 'users';
 
 		for (@nicknames) {
-			$data->[ $options->{'text'} ] =~ s/\b(\Q$_\E)\b/colorize($1, nick_color($_), 2)/ige;
+			$data->[ $options->{'text'} ] =~ s/\b(?<!')(\Q$_\E)\b/colorize($1, nick_color($_), 2)/ige;
 		}
 	}
 
