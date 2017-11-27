@@ -12,6 +12,7 @@ Table of contents:
 4. [Other sources for scripts](#othersources)
 
 <a name="list" />
+
 **[autocomplete-no-spaces.pl](autocomplete-no-spaces.pl)** - Removes the space that is inserted after completing a nick, after a change is detected. You can also add regex rules for when not to remove the space.  
 ~~**[channel-mode-prefix.pl](channel-mode-prefix.pl)**~~ - see [tab-name.pl](tab-name.pl)  
 [ *n* ] **[colored-nicks.pl](colored-nicks.pl)** - Colors nicknames in more places.  
