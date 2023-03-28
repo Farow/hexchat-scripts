@@ -11,7 +11,7 @@ Table of contents:
 3. [Useful scripts made by others](#usefulscripts)
 4. [Other sources for scripts](#othersources)
 
-<a name="list" />
+<a name="list"></a>
 
 **[autocomplete-no-spaces.pl](autocomplete-no-spaces.pl)** - Removes the space that is inserted after completing a nick, after a change is detected. You can also add regex rules for when not to remove the space.  
 ~~**[channel-mode-prefix.pl](channel-mode-prefix.pl)**~~ - see [tab-name.pl](tab-name.pl)  
@@ -42,11 +42,11 @@ Table of contents:
 
 <sub>Legend: [ *u* ] - recently updated, [ *n* ] - new</sub>
 
-<a name="remarks" />
+<a name="remarks"></a>
 ### Remarks
 
-<a name="identifier" />
-####[identifier.pl](identifier.pl)
+<a name="identifier"></a>
+#### [identifier.pl](identifier.pl)
 Usage:
 - Put your NickServ password in the password field from a specific network.
 - Change login method to custom.
@@ -83,7 +83,7 @@ $networks = {
 The way this script works is by not letting HexChat see the 376 (motd end) message until you have been identified or 15s after it is received, provided that no notices have been sent or recognized from NickServ (in case the services are down or the nick is not registered). Not letting HexChat see a motd end message can have side-effects such as lag not being calculated.  
 Finally, by setting your NickServ password in the password field, you will most likely be unable to connect to servers (or use SASL) that require a password (/pass). If you want this fixed, let me know as I don't know use any of those.
 
-<a name="lignore" />
+<a name="lignore"></a>
 #### [light-ignore.pl](light-ignore.pl)
 Any users ignored by this script will have their messages and notices stripped of any formatting and placed in the server tab. You will also not be highlighted by these messages.  
 Usage:
@@ -100,7 +100,7 @@ You can customize the way the messages appear in a similar way you do with Text 
 - `\t` - the separator used by HexChat
 For more ways to format the message take a look at [XChatData's Text Formatting](http://xchatdata.net/Scripting/TextFormatting).
 
-<a name="session" />
+<a name="session"></a>
 #### [session.pl](session.pl)
 Usage:
 - Disable autoconnecting to networks
@@ -109,7 +109,7 @@ Usage:
 Any changes from the point of loading the script will be saved and restored when you next start HexChat. However, while starting up, any changes won't be saved for about a minute, to give HexChat some time to connect and join channels. You can disable autosaving and use `/save` and `/restore` to save and restore the session manually.  
 Inspired by [TingPing's session.py](https://github.com/TingPing/plugins/blob/master/HexChat/session.py).
 
-<a name="tabname" />
+<a name="tabname"></a>
 #### [tab-name.pl](tab-name.pl)
 Changes the names of your tabs by adding more (useful) information to them. Currently you can add your channel mode symbol and the amount of unread messages to the tabs. You can customize the way your tab is named by changing the `$format` and `$format_unread` variables.
 - `%c` - the name of the tab as seen by HexChat
@@ -134,14 +134,14 @@ my $format        = ' %u  %c';
 my $format_unread = '(%u) %c';
 ```
 
-<a name="usefulscripts" />
+<a name="usefulscripts"></a>
 ### Useful scripts made by others
 Scripts made by others that I actually use and find (somewhat) useful.
 
 - [Common Denominator](https://github.com/tobiassjosten/xchat-common-denominator)
 - [Mass Highlight Ignore](http://orvp.net/xchat/masshighlightignore/)
 
-<a name="othersources" />
+<a name="othersources"></a>
 ### Other sources for scripts
 #### Github
 - [HexChat](https://github.com/hexchat/hexchat-addons)
